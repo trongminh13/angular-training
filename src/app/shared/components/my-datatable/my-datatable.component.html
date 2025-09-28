@@ -1,0 +1,51 @@
+<div class="datatable-wrapper">
+  <!-- 1. Trạng thái Đang tải -->
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="spinner"></div>
+    <span>Đang tải dữ liệu...</span>
+  </div>
+
+  <!-- 2. Trạng thái Hiển thị bảng -->
+  <div *ngIf="!isLoading">
+    <div class="table-container">
+      <table class="datatable">
+        <thead>
+          <tr>
+            <th *ngFor="let col of columns" [style.width]="col.width">
+              {{ col.label }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows">
+            <td *ngFor="let col of columns">
+              <!-- Xử lý riêng cho cột 'actions' để hiển thị nút -->
+              <div *ngIf="col.field === 'actions'; else defaultCell" class="action-buttons">
+                <button class="action-btn edit" (click)="edit.emit(row)">Sửa</button>
+                <button class="action-btn delete" (click)="delete.emit(row)">Xóa</button>
+              </div>
+              <!-- Hiển thị dữ liệu cho các cột còn lại -->
+              <ng-template #defaultCell>{{ $any(row)[col.field] }}</ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. Trạng thái Không có dữ liệu -->
+    <div *ngIf="!isLoading && rows.length === 0" class="no-data">
+      <p>Không có dữ liệu để hiển thị.</p>
+    </div>
+
+    <!-- 4. Khu vực Phân trang -->
+    <div *ngIf="totalPages > 1" class="pagination-controls">
+      <span class="total-info">Tổng số: {{ totalRows }} bản ghi</span>
+      <div class="page-actions">
+        <button (click)="previousPage()" [disabled]="currentPage === 1" class="page-button">&laquo; Trước</button>
+        <span class="page-info">Trang {{ currentPage }} / {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="page-button">Sau &raquo;</button>
+      </div>
+    </div>
+  </div>
+</div>
+

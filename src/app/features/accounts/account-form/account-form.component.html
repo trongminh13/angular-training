@@ -1,0 +1,91 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{{ formTitle }}</h2>
+      <button class="close-button" (click)="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="firstname">Họ</label>
+            <input id="firstname" type="text" formControlName="firstname">
+            <div *ngIf="f.firstname.touched && f.firstname.hasError('required')" class="error-message">
+              Họ là bắt buộc.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastname">Tên</label>
+            <input id="lastname" type="text" formControlName="lastname">
+            <div *ngIf="f.lastname.touched && f.lastname.hasError('required')" class="error-message">
+              Tên là bắt buộc.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+
+          <div class="form-group">
+            <label for="age">Tuổi</label>
+            <input id="age" type="number" formControlName="age">
+            <div *ngIf="f.age.touched && f.age.hasError('required')" class="error-message">
+              Tuổi là bắt buộc.
+            </div>
+            <div *ngIf="f.age.touched && f.age.hasError('min')" class="error-message">
+              Tuổi phải lớn hơn hoặc bằng 18.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Giới tính</label>
+            <select id="gender" formControlName="gender">
+              <option value="M">Nam</option>
+              <option value="F">Nữ</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email">
+          <div *ngIf="f.email.touched && f.email.hasError('required')" class="error-message">
+            Email là bắt buộc.
+          </div>
+          <div *ngIf="f.email.touched && f.email.hasError('email')" class="error-message">
+            Email không hợp lệ.
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="address">Địa chỉ</label>
+          <input id="address" type="text" formControlName="address">
+          <div *ngIf="f.address.touched && f.address.hasError('required')" class="error-message">
+            Địa chỉ là bắt buộc.
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label for="balance">Số dư</label>
+          <input id="balance" type="number" formControlName="balance">
+          <div *ngIf="f.balance.touched && f.balance.hasError('required')" class="error-message">
+            Số dư là bắt buộc.
+          </div>
+           <div *ngIf="f.balance.touched && f.balance.hasError('min')" class="error-message">
+            Số dư không được là số âm.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="button secondary" (click)="closeModal()">Hủy</button>
+          <button type="submit" class="button primary" [disabled]="accountForm.invalid">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -1,21 +1,38 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import {AppComponent} from './app.component';
-import {fakeBackendProvider} from './core/services/fake-backend';
-import {AccountService} from './core/services/account.service';
-import {HttpClientModule} from '@angular/common/http';
+import { AppComponent } from './app.component';
+
+
+import { FakeBackendInterceptor } from './core/services/fake-backend';
+
+
+import { MyDatatableComponent } from './shared/components/my-datatable/my-datatable.component';
+import { AccountListComponent } from './features/accounts/account-list/account-list.component';
+import { AccountFormComponent } from './features/accounts/account-form/account-form.component';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule, HttpClientModule],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    MyDatatableComponent,
+    AccountListComponent,
+    AccountFormComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule
+  ],
+
   providers: [
-    // provider used to create fake backend,
-    AccountService,
-    fakeBackendProvider
-  ]
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: FakeBackendInterceptor,
+      multi: true
+    }
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

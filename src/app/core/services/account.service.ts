@@ -1,39 +1,39 @@
-import {HttpBackend, HttpClient, HttpParams} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {map, filter, catchError} from 'rxjs/operators';
-import {Observable} from 'rxjs';
-import {Account, ParamSearch} from '../model/account.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Account, SearchResult } from '../model/account.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AccountService {
-  // tslint:disable-next-line:variable-name
+  private apiUrl = '/accounts';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) { }
+
+  searchAccounts(params: any): Observable<SearchResult> {
+    let httpParams = new HttpParams();
+    for (const key in params) {
+      if (params[key]) {
+        httpParams = httpParams.append(key, params[key]);
+      }
+    }
+    return this.http.get<SearchResult>(this.apiUrl, { params: httpParams });
   }
 
-  getAccounts(param: ParamSearch): Observable<any> {
-    let params = new HttpParams();
-    params = params.append('limit', param.limit.toString());
-    params = params.append('start', param.start.toString());
-    params = params.append('last_name', param.last_name ? param.last_name.toString() : '');
-    params = params.append('first_name', param.first_name ? param.first_name.toString() : '');
-    params = params.append('gender', param.gender ? param.gender.toString() : '');
-    params = params.append('email', param.email ? param.email.toString() : '');
-    params = params.append('address', param.address ? param.address.toString() : '');
-    return this.http.get<Account[]>('/accounts', {
-      params
-    });
+
+  addAccount(accountData: Omit<Account, '_id'>): Observable<Account> {
+    return this.http.post<Account>(this.apiUrl, accountData);
   }
 
-  addAccount(acc: Account): Observable<any> {
-    return this.http.post('/accounts', acc);
+
+  updateAccount(account: Account): Observable<Account> {
+    return this.http.put<Account>(`${this.apiUrl}/${account._id}`, account);
   }
 
-  editAccount(acc: Account): Observable<any> {
-    return this.http.put('/accounts/' + acc._id, acc);
-  }
 
-  deleteAccount(acc: Account): Observable<any> {
-    return this.http.delete('/accounts/' + acc._id);
+  deleteAccount(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
+

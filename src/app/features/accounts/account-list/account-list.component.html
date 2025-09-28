@@ -1,0 +1,41 @@
+<div class="page-container">
+  <h1>Quản lý tài khoản ngân hàng</h1>
+
+
+  <form class="search-form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <input type="text" formControlName="first_name" placeholder="Tìm theo họ...">
+    <input type="text" formControlName="last_name" placeholder="Tìm theo tên...">
+    <input type="text" formControlName="email" placeholder="Tìm theo email...">
+    <select formControlName="gender">
+      <option value="">Tất cả giới tính</option>
+      <option value="M">Nam</option>
+      <option value="F">Nữ</option>
+    </select>
+    <button type="submit" class="search-btn">Tìm kiếm</button>
+  </form>
+
+
+  <div class="action-bar">
+    <button class="add-btn" (click)="openAddModal()">+ Thêm tài khoản mới</button>
+  </div>
+
+
+  <app-my-datatable
+    [isLoading]="isLoading"
+    [columns]="columnsConfig"
+    [rows]="accounts"
+    [totalRows]="totalRows"
+    [pageSize]="pageSize"
+    (pageChanged)="onPageChanged($event)"
+    (edit)="openEditModal($event)"
+    (delete)="deleteAccount($event)">
+  </app-my-datatable>
+</div>
+
+<app-account-form
+  *ngIf="isModalVisible"
+  [account]="selectedAccount"
+  (save)="handleSave($event)"
+  (cancel)="closeModal()">
+</app-account-form>
+

@@ -18,6 +18,10 @@ export function createAccount(data: Partial<Account>): Account {
     ...data,
   } as Account;
 }
+export type SearchResult = {
+  accounts: Account[];
+  total: number;
+};
 
 
 export type ParamSearch = {
@@ -30,8 +34,16 @@ export type ParamSearch = {
   address: string;
 };
 
+
 export function createParamSearch(param: Partial<ParamSearch>): ParamSearch {
   return {
+    limit: 25,
+    start: 0,
+    last_name: '',
+    first_name: '',
+    email: '',
+    gender: '',
+    address: '',
     ...param
   } as ParamSearch;
 }
